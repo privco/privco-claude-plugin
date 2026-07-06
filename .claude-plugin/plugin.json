@@ -1,0 +1,31 @@
+{
+  "name": "privco-data",
+  "displayName": "PrivCo Data",
+  "description": "PrivCo private-company intelligence: 17 MCP tools (company/people/funding/deal search, profiles, financials, contacts) plus a skill that teaches Claude the filter semantics and workflows.",
+  "version": "1.4.0",
+  "author": {
+    "name": "PrivCo",
+    "email": "support@privco.com",
+    "url": "https://www.privco.com"
+  },
+  "homepage": "https://github.com/privco/privco-claude-plugin",
+  "license": "MIT",
+  "keywords": [
+    "privco",
+    "private-companies",
+    "financial-data",
+    "company-search",
+    "funding",
+    "valuations",
+    "mcp"
+  ],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "PrivCo API key",
+      "description": "Your PrivCo API key (contact support@privco.com if you don't have one). Stored securely in your system keychain — never written to config files.",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}

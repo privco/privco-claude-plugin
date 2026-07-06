@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "privco-data-mcp": {
+      "command": "npx",
+      "args": ["-y", "privco-data-mcp@latest"],
+      "env": {
+        "PRIVCO_API_KEY": "${user_config.api_key}"
+      }
+    }
+  }
+}
