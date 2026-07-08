@@ -34,7 +34,7 @@ Requires Node.js ≥ 18 (for the npm-hosted MCP server).
 | Component | What it gives you |
 |---|---|
 | `.mcp.json` | Registers the [`privco-data-mcp`](https://www.npmjs.com/package/privco-data-mcp) stdio MCP server (17 tools), keyed by your API key |
-| `skills/privco-mcp-search/` | The [PrivCo search skill](https://github.com/privco/privco-mcp-search-skill): tool inventory, filter gotchas, standard workflows, and the company-intelligence dashboard template |
+| `skills/privco-mcp-search/` | The [PrivCo search skill](https://github.com/privco/privco-mcp-search-skill): tool inventory, filter gotchas, and standard workflows. The deep per-tool reference and guided prompts (including the company-intelligence dashboard) ship inside the MCP server itself, as `privco://docs/*` resources and built-in prompts |
 
 ## Prefer the hosted connector instead?
 
