@@ -14,7 +14,7 @@ and multi-tool workflows.
 
 When you enable the plugin, Claude Code prompts for your **PrivCo API key**
 (masked; stored in your system keychain, never written to config files).
-Contact <support@privco.com> if you don't have one.
+Contact <sales@privco.com> if you don't have one.
 
 That's it — the MCP server runs on demand via `npx privco-data-mcp`, and the
 skill auto-activates on PrivCo-flavored requests ("find companies that…",

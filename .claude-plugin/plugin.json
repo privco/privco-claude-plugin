@@ -23,7 +23,7 @@
     "api_key": {
       "type": "string",
       "title": "PrivCo API key",
-      "description": "Your PrivCo API key (contact support@privco.com if you don't have one). Stored securely in your system keychain — never written to config files.",
+      "description": "Your PrivCo API key (contact sales@privco.com if you don't have one). Stored securely in your system keychain — never written to config files.",
       "sensitive": true,
       "required": true
     }
