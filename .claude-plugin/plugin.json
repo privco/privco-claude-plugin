@@ -2,7 +2,7 @@
   "name": "privco-data",
   "displayName": "PrivCo Data",
   "description": "PrivCo private-company intelligence: 17 MCP tools (company/people/funding/deal search, profiles, financials, contacts) plus a skill that teaches Claude the filter semantics and workflows.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": {
     "name": "PrivCo",
     "email": "support@privco.com",
