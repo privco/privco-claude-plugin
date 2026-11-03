@@ -11,7 +11,7 @@
     {
       "name": "privco-data",
       "source": "./",
-      "description": "PrivCo private-company data: 17 MCP tools + the PrivCo search skill in one install. Prompts for your API key on enable.",
+      "description": "PrivCo private-company data: 18 MCP tools + the PrivCo search skill in one install. Prompts for your API key on enable.",
       "category": "data"
     }
   ]

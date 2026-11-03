@@ -21,7 +21,7 @@ Guided workflows (present a dashboard, research a company, discover by criteria,
 The bullets below are the high-value-per-line distillation — load them once,
 do not re-derive by trial and error.
 
-## Tool inventory (17 tools)
+## Tool inventory (18 tools)
 
 All tools are exposed under the `mcp__<server-name>__*` namespace once the
 MCP server is registered — `mcp__privco-data-mcp__*` in the standard setup;
@@ -105,10 +105,25 @@ strictly, and reports no confidence. **Always fall through to
 - `industry_keyword` — autocomplete for keyword IDs (use before `keyword`
   filter when unsure).
 - `industry_pics` — list of PICS top-level industry codes.
+- `company_similar` — companies similar to ONE company (`profileId`, optional
+  `limit`). **Use it for every "like / similar to / peers of / comparable to"
+  ask instead of composing `company_search` filters yourself.**
+  - **Peers first** (`source: "peer"`, up to 10, peer score + `reasons`).
+  - **Then criteria rows** (`source: "criteria"`): industry + keywords, then
+    size, with the state used only to narrow, aimed at 10–100. They are ranked
+    by description similarity, then industry + keywords, and each carries
+    `similarity`, `match` and `reasons`.
+  - **To page or refine:** pass `meta.criteria.filters` as `filters` to
+    `company_search`. `meta.ladder` shows how the set was narrowed or widened.
+  - **Caveats:** criteria rows are US-HQ only; one search point per call.
 
 **Stage 3 — enrichment (profile_id → full record)**
 - `profile` — full **company** profile (revenue, employees, funding, founders,
-  contacts, investors, competitors, subsidiaries).
+  contacts, investors, competitors, subsidiaries, and `similar_companies`: up
+  to 10 algorithmic peers with `score` + `reasons`).
+  - `competitors` is the editorial list, and most companies have none.
+  - `similar_companies` covers ~98 % of companies.
+  - For a longer, ranked list, call `company_similar`.
 - `general_profile` — full profile for **non-company** entities (Investor,
   Person, etc.). Use when `profile_type != "Company"` from `match`.
 - `people` — execs & board on a company.
@@ -339,7 +354,7 @@ revenue/headcount charts + valuation range + financial/profile/funding
 tables, with the PrivCo house style rules (CSS variables, Chart.js
 conventions, sentence case) and the same field-shape gotchas listed above.
 
-## Access & auth — two transports, same 17 tools
+## Access & auth — two transports, same 18 tools
 
 - **Remote connector (recommended):** PrivCo-hosted endpoint at
   `https://mcp.privco.com/mcp` (MCP Streamable HTTP). Auth is OAuth 2.1 —
@@ -357,6 +372,42 @@ conventions, sentence case) and the same field-shape gotchas listed above.
 - For the full per-tool field reference, common pitfalls in one-line form, and
   expanded workflow detail, read the `privco://docs/usage-guide` resource from
   the MCP server — the canonical, always-current reference in the contract.
+
+## When a tool returns an error
+
+Errors come back as `isError: true` with a JSON body. Since `privco-data-mcp`
+1.5.0 that body is classified, so branch on the fields rather than the prose:
+
+```json
+{ "success": false, "error": "<message>", "status": 401,
+  "code": "unauthorized", "retryable": false }
+```
+
+- `quota_exceeded` (403, since `privco-data-mcp` 1.6.2) — an allowance is used
+  up. The message names it (unique profiles, points, financial or deal calls),
+  how much is used, the limit and the reset date. Tell the user exactly that;
+  **never retry** and never call it a key problem: the key is valid.
+- `subscription_expired` (403, 1.6.2) — the account's API subscription is out
+  of term; the message gives the start or end date. Stop and tell the user.
+- `unauthorized` (401/403) — stop and tell the user. Bad or missing key, or a
+  missing per-endpoint grant (`funding_search` and `deal_search` need one).
+  **Never retry**; it cannot succeed.
+- `rate_limited` (429) — a throttle. Back off, then retry.
+- `bad_request` (4xx) — the message relays the API's own validation text. Fix
+  the arguments; do not retry unchanged.
+- `not_found` (404) — re-run entity resolution instead of retrying.
+- `upstream_error` (5xx) / `timeout` / `network_error` — transient, one retry
+  is reasonable.
+
+Two traps:
+
+- **Before 1.5.0 every failure returned one fixed string** (`"Match request
+  failed"` and its per-tool siblings), so an invalid key looked exactly like a
+  throttle or a 500. On an older server, do not infer the cause from the text.
+- **A successful `tools/list` does not mean the credentials are valid.** The
+  catalogue is served to any request carrying a credential header, real or
+  not, on both the local and remote transports. The first real tool call is
+  the authentication check.
 
 ## When this skill applies — and when not
 
